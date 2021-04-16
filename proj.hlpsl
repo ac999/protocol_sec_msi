@@ -41,7 +41,7 @@ def=
 
     transition
 
-    1.  State   = 0 /\ RCV_bA(start) =|>
+    1.  State   = 0 /\ RCV_BA(start) =|>
         State' := 2 /\ Na'  := new()
                     /\ SND_SA(A.B.{Na'}_Ka)
 
