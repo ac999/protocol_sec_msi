@@ -1,5 +1,5 @@
 % A -> S: (A.B.{Na}_Ka)     - Ka is a key shared by A and S
-% A <- S: (A.B.{K.Na.Ns}_Ka.- S generates new key K
+% A <- S: (A.B.{K.Na.Ns.B}_Ka.- S generates new key K
 %    {K.Na.Ns}_Kb)          - A can forward {K.Na.Ns}_Kb to B w/o decrypting
 % A -> B: (A.B.{K.Na.Ns}_Kb.
 %    {Na.Ns}_K)             - Confirmation that B knows K
@@ -21,7 +21,11 @@ def=
 
     1.  State   = 1 /\ RCV_AS(A.B.{Na'}_Ka) =|>
         State' := 3 /\ Ns'  := new() /\ K'  := new()
+<<<<<<< HEAD
                     /\ SND_AS(A.B.{K'.Na'.Ns'.B}_Ka.{K'.Na'.Ns'.A}_Kb)
+=======
+                    /\ SND_AS(A.B.{K'.Na'.Ns'.B}_Ka.{K'.Na'.Ns'}_Kb)
+>>>>>>> Bob authenticates to Alice
                     /\ secret(K',k,{A,B,S})
 end role
 
@@ -48,7 +52,11 @@ def=
     2.  State   = 2 /\ RCV_SA(A.B.{K'.Na.Ns'.B}_Ka.X') =|>
         State' := 4 /\ SND_BA(A.B.X'.{Na.Ns'}_K')
 
+<<<<<<< HEAD
     3.  State   = 4 /\ RCV_BA(A.B.{Ns.Na.Nb'}_K) =|>
+=======
+    3.  State   = 4 /\ RCV_BA(A.B.{Ns.Na}_K) =|>
+>>>>>>> Bob authenticates to Alice
         State' := 6 /\ request(A,B,alice_bob_na, Na)
                     /\ SND_BA(A.B.{Ns.Nb'}_K)
                     /\ witness(B,A,bob_alice_nb, Nb')
