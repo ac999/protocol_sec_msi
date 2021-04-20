@@ -1,5 +1,5 @@
 % A -> S: (A.B.{Na}_Ka)     - Ka is a key shared by A and S
-% A <- S: (A.B.{K.Na.Ns.B}_Ka.- S generates new key K
+% A <- S: (A.B.{K.Na.Ns}_Ka.- S generates new key K
 %    {K.Na.Ns}_Kb)          - A can forward {K.Na.Ns}_Kb to B w/o decrypting
 % A -> B: (A.B.{K.Na.Ns}_Kb.
 %    {Na.Ns}_K)             - Confirmation that B knows K
