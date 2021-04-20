@@ -48,7 +48,6 @@ def=
     2.  State   = 2 /\ RCV_SA(A.B.{K'.Na.Ns'.B}_Ka.X') =|>
         State' := 4 /\ SND_BA(A.B.X'.{Na.Ns'}_K')
 
-<<<<<<< HEAD
     3.  State   = 4 /\ RCV_BA(A.B.{Ns.Na.Nb'}_K) =|>
         State' := 6 /\ request(A,B,alice_bob_na, Na)
                     /\ SND_BA(A.B.{Ns.Nb'}_K)
