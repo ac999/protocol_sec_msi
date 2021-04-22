@@ -64,7 +64,7 @@ def=
             Ns, Na  : text,
             K       : symmetric_key
 
-    init    State := 0
+    init    State := 5
 
     transition
 
