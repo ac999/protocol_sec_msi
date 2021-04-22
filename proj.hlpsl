@@ -121,7 +121,7 @@ end role
 goal
     secrecy_of k
     authentication_on alice_bob_na
-    % authentication_on bob_alice_nb
+    authentication_on bob_alice_nb
 end goal
 
 
