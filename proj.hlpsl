@@ -1,9 +1,10 @@
 % A -> S: (A.B.{Na}_Ka)     - Ka is a key shared by A and S
-% A <- S: (A.B.{K.Na.Ns}_Ka.- S generates new key K
-%    {K.Na.Ns}_Kb)          - A can forward {K.Na.Ns}_Kb to B w/o decrypting
-% A -> B: (A.B.{K.Na.Ns}_Kb.
+% A <- S: (A.B.{K.Na.Ns.B}_Ka.- S generates new key K
+%    {K.Na.Ns.A}_Kb)          - A can forward {K.Na.Ns}_Kb to B w/o decrypting
+% A -> B: (A.B.{K.Na.Ns.A}_Kb.
 %    {Na.Ns}_K)             - Confirmation that B knows K
-% A <- B: (A.B.{Ns.Na}_K)
+% A <- B: (A.B.{Ns.Na.Nb}_K) -
+% A -> B: (A.B.{Ns.Nb}_K)   - Confirmation that A knows Nb
 
 role server (A, S, B: agent,
              Ka, Kb : symmetric_key,
@@ -51,7 +52,7 @@ def=
     3.  State   = 4 /\ RCV_BA(A.B.{Ns.Na.Nb'}_K) =|>
         State' := 6 /\ request(A,B,alice_bob_na, Na)
                     /\ SND_BA(A.B.{Ns.Nb'}_K)
-                    /\ witness(B,A,bob_alice_nb, Nb')
+                    /\ witness(A,B,bob_alice_nb, Nb')
 
 
 end role
