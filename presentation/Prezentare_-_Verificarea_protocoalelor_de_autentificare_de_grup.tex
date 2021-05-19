@@ -6,16 +6,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{xcolor}
-\usepackage{tikz}
-\usetikzlibrary{shapes, arrows, calc, arrows.meta, fit, positioning} % these are the parameters passed to the library to create the node graphs  
-\tikzset{  
-    -Latex,auto,node distance =1.5 cm and 1.3 cm, thick,% node distance is the distance between one node to other, where 1.5cm is the length of the edge between the nodes  
-    state/.style ={ellipse, draw, minimum width = 0.9 cm}, % the minimum width is the width of the ellipse, which is the size of the shape of vertex in the node graph  
-    point/.style = {circle, draw, inner sep=0.18cm, fill, node contents={}},  
-    bidirected/.style={Latex-Latex,dashed}, % it is the edge having two directions  
-    el/.style = {inner sep=2.5pt, align=right, sloped}  
-}  
+\usepackage{xcolor} 
 
 \usepackage[backend=bibtex,style=ieee]{biblatex}
 \addbibresource{group_protocols_auth.bib}
