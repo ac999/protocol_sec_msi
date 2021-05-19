@@ -20,6 +20,8 @@
 \usepackage[backend=bibtex,style=ieee]{biblatex}
 \addbibresource{group_protocols_auth.bib}
 
+\setbeamertemplate{frametitle continuation}{}
+
 \author{Andrei Cristian\\
 \href{mailto:andrei.cristian1@info.uaic.ro}{andrei.cristian1@info.uaic.ro}}
 \title{Verificarea protocoalelor de autentificare de grup prin Scyther}
@@ -138,7 +140,7 @@ Din cauza limitarii utilitarului, doar un subset de proprietati de securitate au
 
 \begin{frame}{Un framework general}
 
-Presupunem ca sunt $N$ membri in grupul de utilizatori $\mathbb{U}$. Fluxul de mesaje al frameworkului general propus in \cite{fagrauth} poate fi descris in urmatorii patru pasi:
+Presupunem ca sunt $N$ membri in grupul de utilizatori $\mathbb{U}$. Fluxul de mesaje al frameworkului general propus in \cite{generalframework} poate fi descris in urmatorii patru pasi:
 \begin{enumerate}
 
 \item $U_A \rightarrow U_1: ID_A, UID, X, C_0, MAC_A$.
@@ -162,7 +164,7 @@ Calcularea parametrilor $C_i (0 \leq i \leq N)$, $X$ si $Y$ ai protocolului baza
 
 \item $C_0$ este calculat de catre $U_A$ prin $C_0 = \xi(r) = \xi(g^r_A)$, unde $r_A \in [1, p-1]$ este un numar generat aleator, $\xi$ este un mesaj ce va fi criptat prin algoritmul de criptare Elgamal. Similar, $U_i (2 \leq i \leq N)$ calculeaza $C_i = C_{i-1} \times r^{x_i} = \xi(r^{\sum^i_{t=1}x_t})$.
 
-\item $X$ este calculat ca solutie a $X \equiv V_i mod k_i (1 \leq  i \leq N)$, folosind teorema chineza a resturilor (CRT), unde $k_i$ este un secret partajat intre $U_A$ si $U_i$.
+\item $X$ este calculat ca solutie a $X \equiv V_i$ mod $k_i (1 \leq  i \leq N)$, folosind teorema chineza a resturilor (CRT), unde $k_i$ este un secret partajat intre $U_A$ si $U_i$.
 
 \begin{itemize}
 
@@ -171,7 +173,7 @@ Calcularea parametrilor $C_i (0 \leq i \leq N)$, $X$ si $Y$ ai protocolului baza
 
 \end{itemize}
 
-\item $U_A$ calculeaza $Y$ prin rezolvarea $Y \equiv W_i mod k_i (1 \leq i \leq N)$, unde $W_i = \{ID_A, ID_i, KP_i\}$ si $KP_i = KP_U - \{G^{n_i}\}$.
+\item $U_A$ calculeaza $Y$ prin rezolvarea $Y \equiv W_i$ mod $k_i (1 \leq i \leq N)$, unde $W_i = \{ID_A, ID_i, KP_i\}$ si $KP_i = KP_U - \{G^{n_i}\}$.
 
 \item Cheia sesiunii dintre $U_A$ si $U_I$ este calculata ca find  $g^{m_in_j}$, in timp ce cheia sesiunii dintre $U_i$ si $U_j$ $(1 \leq i, j \leq N, i \neq j)$ este calculata ca fiind $g^{n_in_j}$.
 
@@ -201,7 +203,7 @@ Calcularea parametrilor $C_i (0 \leq i \leq N)$, $X$ si $Y$ ai protocolului baza
 
 	\item $t \in M \Rightarrow M \vdash t$: daca \textit{t} este un element al lui \textit{M}, atunci \textit{A} cunoaste \textit{t}.
 	\item $M \vdash (t_1, t_2) \Rightarrow \{ M \vdash t_1, M \vdash t_2 \}$: daca \textit{A} cunoaste $(t_1, t_2)$, atunci \textit{A} cunoaste ambii termeni $t_1$ si $t_2$.
-	\item $\{ M \vdash t_1, M \vdash t_2 \} \ Rightarrow M \vdash (t_1, t_2)$: daca \textit{A} cunoaste ambii termeni $t_1$ si $t_2$, atunci A cunoaste $(t_1, t_2)$.
+	\item $\{ M \vdash t_1, M \vdash t_2 \} \Rightarrow M \vdash (t_1, t_2)$: daca \textit{A} cunoaste ambii termeni $t_1$ si $t_2$, atunci A cunoaste $(t_1, t_2)$.
 	\item $\wedge_{1 \leq i \leq n} M \vdash t_i \Rightarrow M \vdash f(t_1, ..., t_n)$: daca \textit{A} cunoaste toti $t_i (1 \leq i \leq n )$ si \textit{f} este o functie publica, atunci \textit{A} poate calcula rezultatul functiei \textit{f} cu datele de intrare $t_1, ..., t_n$.
 	\item $\{ M \vdash t, M \vdash k \} \Rightarrow M \vdash \{ t \}_k$: daca \textit{A} cunoaste mesajul \textit{t} si cheia \textit{k}, atunci A poate calcula mesajul criptat $\{ t \}_k$.
 	\item $\{ M \vdash \{ t \}_k, M \vdash k^{-1} \} \Rightarrow M \vdash t$: daca \textit{A} cnoaste mesajul criptat $\{ t \}_k$ si cheia de decriptare $k^{-1}$, atunci \textit{A} poate decripta criptotextul si obtine astfel plaintextul \textit{t}.
@@ -242,6 +244,141 @@ Calcularea parametrilor $C_i (0 \leq i \leq N)$, $X$ si $Y$ ai protocolului baza
 	\item \textbf{Commitment} este o promisiune a unei parti din comunicare catre alta parte. De exemplu, $claim(R,\textbf{Commit}, R', t)$ inseamna ca rolul \textit{R} face o promisiune \textit{t} catre rolul \textit{R'}. \textbf{Commitment} este folosit pentru a verifica protocoalele impotriva \textbf{atacurilor de uzurpare} (en. impersonation attacks).
 	
 	\end{itemize}
+
+\end{itemize}
+
+\end{frame}
+
+\section{Analiza formala a protocoalelor de Tip I}
+
+\subsection{Formalizarea cerintelor de securitate}
+
+\begin{frame}[t,allowframebreaks]{Formalizarea cerintelor de securitate}
+
+Fie \textit{R} si \textit{R'} doua parti de comunicare. Se pretinde ca protocoalele bazate pe problema logaritmului discret indeplinesc urmatoarele cerinte de securitate:
+
+\begin{enumerate}
+
+\item \textbf{Autentificarea mutuala}
+
+	\begin{itemize}
+
+	\item Autentificarea este calea prin care asiguram o parte a comunicarii ca aceasta comunica intr-adevar cu partea dorita. Daca autentificarea este indeplinita de ambele parti ale comunicarii, aceasta se numeste \textbf{autentificare mutuala}.
+	\item Autentificarea autentificatorului $U_A$ cu $U_i$ poate fi confirmata daca $h'_i$ este egal cu $h_i$. Tot grupul poate fi considerat autentificat doar daca $C'_N$ este egal cu $C_N$. Se va folosi \textbf{match} pentru a verifica egalitatea dintre $C_N$ si $C'_N$.
+	\item In plus, proprietatea \textbf{Alive} este necesara pentru a sti ca intr-adevar partile de comunicare sunt cele dorite. 
+
+	\end{itemize}
+	
+\item \textbf{Autentificarea implicita a cheii}
+
+	\begin{itemize}
+	
+	\item Daca un protocol satisface autentificarea implicita a cheii \textit{k} (en. implicit key authentication), iar \textit{R} cere ca aceasta cerinta de securitate sa fie indeplinita, inseamna ca \textit{R'} este singura entitate care are posibilitatea de a sti cheia \textit{k}.
+	
+	\item Vom folosi $claim(R,SKR,k)$ si $claim(R',SKR,k)$ pentru a exprima aceasta proprietate.
+	
+	\end{itemize}
+	
+\item \textbf{Siguranta impotriva atacurilor de uzurpare}
+
+	\begin{itemize}
+	
+	\item Atac in care adversarul se comporta sub identitatea unei parti legitime de comunicare.
+	
+	\item Cat timp \textbf{autentificare mutuala} tine, putem pretinde ca niciuna dintre partile de comunicare nu este uzurpata de adversar (verificam daca $h'_i = h_i$ si $C'_N = C_N$).
+	
+	\end{itemize}
+	
+\item \textbf{Siguranta impotriva adversarilor pasivi}
+
+	\begin{itemize}
+	
+	\item Un adversar pasiv intercepteaza mesaje de pe canalul de comunicare, le analizeaza si incearca sa afle cat mai multe informatii posibile.
+	\item Spre deosebire de un adversar activ, nu poate sa stearga sau sa introduca noi mesaje in canalul de comunicare.
+	\item Principalul scop este sa invete informatii \textbf{utile} din mesajele interceptate.
+	\item In protocoalele de tipul I bazate pe DLP, cea mai utila informatie este cheia grupului (\textit{k}) si cheile de sesiune (\textit{k}.
+	\item Utilizam $claim(R,SKR,K)$ pentru a exprima aceasta cerinta.
+	
+	\end{itemize}
+	
+\item \textbf{Furnizarea de \textit{forward secrecy} si \textit{backward secrecy}}
+
+	\begin{itemize}
+
+	\item Daca un protocol furnizeaza \textbf{forward secrecy}, atunci expunerea cheilor din sesiunea curenta nu va duce la expunerea cheilor din sesiunile viitoare.
+	\item Daca un protocol furnizeaza \textbf{backward secrecy}, atunci compromiterea cheilor din sesiunea curenta nu cauzeaza compromiterea cheilor din sesiunile anterioare.
+	\item Cum Scyther nu permite valori cu durata lunga, in afara de cheile partajate intre doua parti, aceste doua cerinte de securitate nu sunt analizate.
+	
+	\end{itemize}
+
+\end{enumerate}
+
+\end{frame}
+
+\subsection{Specificare problemelor dificile}
+
+\begin{frame}[t,allowframebreaks]{Specificarea problemelor dificile}
+
+\begin{enumerate}
+
+\item \textbf{Diffie-Hellman}
+
+	\begin{itemize}
+
+	\item Tipul \textbf{hashfunction} este folosit pentru a declara o functie hash sigura (functie \textit{one-way} - calculul inversului ei este irealizabil).
+	\item Probleme matematice dificile, precum problema Diffie-Hellman folosita pentru a calcula cheile de sesiune, functii hash criptografice, criptare proxy si MAC pot fi considerate o functie hash one-way, deoarece adversarul definit de Scyther nu poate sa ii calculeze inversul.
+	\item Daca doua parti \textit{A} si \textit{B} vor sa stabileasca o cheie de sesiune bazata pe protocolul de schimb de chei Diffie-Hellman, atunci ei trebuie:
+	\begin{enumerate}
+		\item sa genereze parametrii \textit{a} si \textit{b}.
+		\item sa trimita $g^a$ si $g^b$ unul altuia.
+		\item sa calculeze cheile lor de sesiune $(g^b)^a$, respectiv $(g^a)^b$.
+	\end{enumerate}
+	
+	\item Formalizat, declaram doua \textbf{hashfunction} \textit{g} and \textit{h} si apoi scriem cheile de sesiune ca $h(g(b),a)$ si $h(g(a),b)$. Similar, folosim \textbf{hashfunction} \textit{H, C} si \textit{MAC} pentru a specifica functii hash, criptare proxy si MAC.
+	
+	\end{itemize}
+	
+\item \textbf{Teorema chineza a resturilor (CRT)}
+	
+	\begin{itemize}
+	
+	\item In protocoalele originale \cite{generalframework}, parametrii \textit{X} si \textit{Y} sunt calculati prin $X \equiv V_i$ mod $k_i$ $(1 \leq i \leq N)$ si $Y \equiv W_i$ mod $k_i$ $(1 \leq i \leq N)$ folosind CRT, unde $k_i$ este o valoare cu termen lung partajata intre $U_A$ si $U_i$.
+	\item Cum Scyther nu suporta valori cu termen lung in afara de chei simetrice/asimetrice, se va folosi o cheie simetrica intre $U_A$ si $U_i$ pentru a simula aceasta valoare $k_i$.
+	
+	\end{itemize}
+	
+\item \textbf{Secrete prepartajate}
+
+	\begin{itemize}
+	
+	\item $x_i$ $(1 \leq i \leq N)$ este o alta valoare partajata pe termen lung. Ea este folosita pentru autentificarea mutuala.
+	\item Cum cheia simetrica $k(U_A,U_i)$ este deja folosita pentru a simula $k_i$, $x_i$ trebuie formalizat diferit.
+	\item Cum $x_i$ este o valoare cu termen lung folosita pentru autentificarea mutuala, ar trebui sa fie de ajuns ca $x_i$ sa fi fost deja partajat intre $U_A$ si $U_i$ inainte de autentificarea mutuala.
+	\item Asadar, $x_i$ va fi inclus in \textit{X}. Cum parametrii din $V_i$ pot fi extrasi doar de $U_i$, aceasta asumptie este rezonabila si realistica.
+	
+	\end{itemize}
+
+\end{enumerate}
+
+\end{frame}
+
+\section{Analiza formala a protocoalelor de Tip II}
+
+\begin{frame}[allowframebreaks]{Analiza formala a protocoalelor de Tip II}
+
+\begin{itemize}
+
+\item Specificarea protocoalelor de tip II bazate pe DLP este similara ca in cazul celor de tip I: formalizarea problemelor dificile si a cerintelor de securitate sunt la fel, exceptie facand autentificarea mutuala.
+
+\item Comparand cu formalizarea protocoalelor de tip I bazate pe DLP, exista doua mari diferente:
+	
+	\begin{enumerate}
+	
+	\item Cand $U_A$ trimite mesaje ce includ $V_i$ catre toti membrii grupului, in protocolul de tip I, $h_i$ este inclus pentru autentificarea mutuala. Totusi, in protocoalele de tip II, $U_A$ isi foloseste semnatura pentru autentificare.
+	
+	\item Cand utilizatorii din group primesc aceste mesaje de la $U_A$, ei nu mai trebuie sa verifice egalitatea lui $h_i$ pentru a incheia autentificarea lui $U_A$. In schimb, ei verifica semnatura lui $U_A$. Aceasta proprietate poate fi asigurata prin securitatea semnaturilor bazate pe PKI, deci nu trebuie verificata aici.
+	
+	\end{enumerate}
 
 \end{itemize}
 
