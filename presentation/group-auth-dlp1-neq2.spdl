@@ -57,12 +57,16 @@ protocol Group-authentication-DLP (UA , U1 , U2 )
         var gm1, gn1, gn2       : gtype;
         var x1                  : wtype;
         recv_1(UA, U1, U1, U2, v1, r, C0, MACA11);
+        # compute MACA11'
+        match(MACA11', MAC(KG, UA, U1, U2, v1, r, C0));
         match(MACA11, MACA11');
-        # calculate h1
+        # compute h1
         match(h1, H(UA, U1, xa, t1));
         match(h1, h1');
         send_3(U1, U2, gn1, C1, MAC1);
         recv_5(UA, U1, w1, MACA21);
+        # compute MACA21'
+        match(MACA21', MAC(w1));
         match(MACA21, MACA21');
         claim(U1, Alive);
         claim(U1, Nisynch);
@@ -74,16 +78,22 @@ protocol Group-authentication-DLP (UA , U1 , U2 )
     {
         var MACA12, MACA12', MAC2, MACA22, MACA22', MACA2 : mtype;
         var h2, h2'         : htype;
-        var r, t2, KG, n2   : Nonce;
+        var r, t2, KG, n2, xa  : Nonce;
         var gm2, gn1, gn2   : gtype;
         var x2              : wtype;
         var C2              : ctype;
         recv_2(UA, U2, U1, U2, v2, r, MACA12);
+        # compute MACA12'
+        match(MACA12', MAC(KG, UA, U1, U2, v2, r));
         match(MACA12, MACA12');
+        # compute h2'
+        match(h2', H(UA, U1, xa, t2));
         match(h2, h2');
         send_4(U2, UA, gn1, gn2, C2, MAC2);
         recv_6(UA, U2, w2, MACA22);
-        match(MACA2, MACA22');
+        # compute MACA22'
+        match(MACA22', MAC(w2));
+        match(MACA22, MACA22');
         claim(U2, Alive);
         claim(U2, Nisynch);
         claim(U2, SKR, KG);
