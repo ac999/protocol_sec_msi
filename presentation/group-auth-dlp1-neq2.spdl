@@ -12,7 +12,6 @@ protocol Group-authentication-DLP (UA , U1 , U2 )
     role UA
     {
         fresh xa, KG, r, t1, t2, m1, m2    : Nonce;
-        fresh x1        : wtype;
         var C0          : ctype;
         var x1, x2      : wtype;
         var h1, h2      : htype;
@@ -22,9 +21,9 @@ protocol Group-authentication-DLP (UA , U1 , U2 )
         match(gm1, g(m1));
         # compute gm2
         match(gm2, g(m2));
-        match(h1, H(UA, U1, xa, t1));
+        match(h1, H(UA, U1, x1, t1));
         # compute h2
-        match(h2, H(UA, U2, xa, t2));
+        match(h2, H(UA, U2, x2, t2));
         # compute C0 from r
         match(C0, C(r));
         match(MACA11, MAC(KG, UA, U1, U2, v1, r, C0));
@@ -37,7 +36,7 @@ protocol Group-authentication-DLP (UA , U1 , U2 )
         match(MAC2', MAC(U2, UA, gn1, gn2, C2));
         match(MAC2, MAC2');
         # compute C2'
-        # todo
+        match(C2', C(C(C0)));
         match(C2, C2');
         send_5(UA, U1, w1, MACA21);
         send_6(UA, U2, w2, MACA22);
@@ -50,6 +49,7 @@ protocol Group-authentication-DLP (UA , U1 , U2 )
 
     role U1
     {
+        fresh n1                : Nonce;
         var MACA11, MACA11', MAC1, MACA21, MACA21'  : mtype;
         var KG, xa, r, t1, n1   : Nonce;
         var C0, C1              : ctype;
@@ -61,8 +61,14 @@ protocol Group-authentication-DLP (UA , U1 , U2 )
         match(MACA11', MAC(KG, UA, U1, U2, v1, r, C0));
         match(MACA11, MACA11');
         # compute h1
-        match(h1, H(UA, U1, xa, t1));
+        match(h1, H(UA, U1, x1, t1));
         match(h1, h1');
+        # compute C1
+        match(C1, C(C0));
+        # create gn1
+        match(gn1, g(n1));
+        # compute MAC1
+        match(MAC1, MAC(U1, U2, gn1, C1));
         send_3(U1, U2, gn1, C1, MAC1);
         recv_5(UA, U1, w1, MACA21);
         # compute MACA21'
@@ -76,19 +82,30 @@ protocol Group-authentication-DLP (UA , U1 , U2 )
 
     role U2
     {
-        var MACA12, MACA12', MAC2, MACA22, MACA22', MACA2 : mtype;
+        fresh n2            : Nonce;
+        var MACA12, MACA12', MAC2, MACA22, MACA22', MACA2, MAC1, MAC1' : mtype;
         var h2, h2'         : htype;
         var r, t2, KG, n2, xa  : Nonce;
         var gm2, gn1, gn2   : gtype;
         var x2              : wtype;
-        var C2              : ctype;
+        var C2, C1          : ctype;
         recv_2(UA, U2, U1, U2, v2, r, MACA12);
         # compute MACA12'
         match(MACA12', MAC(KG, UA, U1, U2, v2, r));
         match(MACA12, MACA12');
         # compute h2'
-        match(h2', H(UA, U1, xa, t2));
+        match(h2', H(UA, U1, x2, t2));
         match(h2, h2');
+        # recieve from U1
+        recv_3(U1, U2, gn1, C1, MAC1);
+        # check MAC1
+        match(MAC1', MAC(U1, U2, gn1, C1));
+        # compute C2
+        match(C2, C(C1));
+        # compute gn2
+        match(gn2, g(n2));
+        # compute MAC2
+        match(MAC2, MAC(U2, UA, gn1, gn2, C2));
         send_4(U2, UA, gn1, gn2, C2, MAC2);
         recv_6(UA, U2, w2, MACA22);
         # compute MACA22'
