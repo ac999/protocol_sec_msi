@@ -1,3 +1,5 @@
+usertype label;
+const p0,p1;
 protocol Protocolv0(I,R)
 {
 	role I
@@ -5,9 +7,9 @@ protocol Protocolv0(I,R)
 		fresh ni: Nonce;
 		var nr: Nonce;
 
-		send_1(I,R, {ni,R}pk(R) );
-		recv_2(R,I, {ni,nr,R}pk(I) );
-		send_3(I,R, {nr}pk(R) );
+		send_1(I,R, {p0, ni,R}pk(R) );
+		recv_2(R,I, {p0, ni,nr,R}pk(I) );
+		send_3(I,R, {p0, nr}pk(R) );
 
 		claim_i1(I,Secret,ni);
 		claim_i2(I,Secret,nr);
@@ -20,9 +22,9 @@ protocol Protocolv0(I,R)
 		var ni: Nonce;
 		fresh nr: Nonce;
 
-		recv_1(I,R, {ni,R}pk(R) );
-		send_2(R,I, {ni,nr,R}pk(I) );
-		recv_3(I,R, {nr}pk(R) );
+		recv_1(I,R, {p0,ni,R}pk(R) );
+		send_2(R,I, {p0,ni,nr,R}pk(I) );
+		recv_3(I,R, {p0,nr}pk(R) );
 
 		claim_r1(R,Secret,ni);
 		claim_r2(R,Secret,nr);
@@ -38,9 +40,9 @@ protocol Protocolv1(I,R)
 		fresh ni: Nonce;
 		var nr: Nonce;
 
-		send_1(I,R, {ni,I,R}pk(R) );
-		recv_2(R,I, {ni,nr,R}pk(I) );
-		send_3(I,R, {nr,I,R}pk(R) );
+		send_1(I,R, {p1, ni, I}pk(R) );
+		recv_2(R,I, {p1, ni, nr, R}pk(I) );
+		send_3(I,R, {p1, nr}pk(R) );
 
 		claim_i1(I,Secret,ni);
 		claim_i2(I,Secret,nr);
@@ -53,9 +55,9 @@ protocol Protocolv1(I,R)
 		var ni: Nonce;
 		fresh nr: Nonce;
 
-		recv_1(I,R, {ni,I,R}pk(R) );
-		send_2(R,I, {ni,nr,R}pk(I) );
-		recv_3(I,R, {nr,I,R}pk(R) );
+		recv_1(I,R, {p1, ni, I}pk(R) );
+		send_2(R,I, {p1, ni, nr, R}pk(I) );
+		recv_3(I,R, {p1, nr}pk(R) );
 
 		claim_r1(R,Secret,ni);
 		claim_r2(R,Secret,nr);
